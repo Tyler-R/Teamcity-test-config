@@ -1,5 +1,6 @@
 import jetbrains.buildServer.configs.kotlin.v2019_2.*
 import jetbrains.buildServer.configs.kotlin.v2019_2.triggers.vcs
+import jetbrains.buildServer.configs.kotlin.v2019_2.vcs.GitVcsRoot
 
 /*
 The settings script is an entry point for defining a TeamCity
@@ -27,18 +28,54 @@ version = "2020.1"
 
 project {
 
-    buildType(Build)
+    vcsRoot(HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster)
+    vcsRoot(HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster1)
+
+    buildType(Deploy)
+    buildType(Verify)
 }
 
-object Build : BuildType({
-    name = "Build"
+object Deploy : BuildType({
+    name = "Deploy"
 
     vcs {
-        root(DslContext.settingsRoot)
+        root(HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster)
     }
 
     triggers {
         vcs {
         }
+    }
+})
+
+object Verify : BuildType({
+    name = "Verify"
+
+    vcs {
+        root(HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster1)
+    }
+
+    triggers {
+        vcs {
+        }
+    }
+})
+
+object HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster : GitVcsRoot({
+    name = "https://github.com/Tyler-R/teamcity-test-main#refs/heads/master"
+    url = "https://github.com/Tyler-R/teamcity-test-main"
+    authMethod = password {
+        userName = "Tyler-R"
+        password = "credentialsJSON:5c48c11d-099d-4fb5-abc1-c01d825f09fa"
+    }
+})
+
+object HttpsGithubComTylerRTeamcityTestMainRefsHeadsMaster1 : GitVcsRoot({
+    name = "https://github.com/Tyler-R/teamcity-test-main"
+    url = "https://github.com/Tyler-R/teamcity-test-main"
+    branch = "-refs/heads/master"
+    authMethod = password {
+        userName = "Tyler-R"
+        password = "credentialsJSON:5c48c11d-099d-4fb5-abc1-c01d825f09fa"
     }
 })
